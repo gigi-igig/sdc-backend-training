@@ -16,7 +16,7 @@ async def root():
 
 @app.get("/items/{item_id}")
 async def read_item(
-        item_id: Annotated[Decimal, Path(gt=1, lt=1000, description="Item ID must be between 1 and 1000.")], 
+        item_id: Annotated[Decimal, Path(ge=1, le=1000, description="Item ID must be between 1 and 1000.")], 
         q: Annotated[str | None, Query(min_length=3, max_length=50, description="Query 'q' must be between 3 and 50 characters.")] = None, 
         sort_order: str = "asc"
     ):
@@ -31,7 +31,7 @@ async def read_item(
 
 @app.put("/items/{item_id}")
 async def update_item(
-                      item_id: Annotated[Decimal, Path(gt=1, lt=1000, description="Item ID must be between 1 and 1000.")], 
+                      item_id: Annotated[Decimal, Path(ge=1, le=1000, description="Item ID must be between 1 and 1000.")], 
                       item: Item = None, 
                       q: Annotated[str | None, Query(min_length=3, max_length=50, description="Query 'q' must be between 3 and 50 characters.")] = None
                       ):
