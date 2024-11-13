@@ -47,14 +47,14 @@ async def update_item(
 
 class Item_F(BaseModel):
     name: str
-    description: str| None = Field()
-    price: float = Field()
-    tax: float| None = Field()
+    description: str| None = Field(default=None, title="The description of the item")
+    price: float = Field(gt = 0., description="The price of the item must greater than zero")
+    tax: float = Field(gt = 0., description="The tax of the item must greater than zero")
 
 @app.post("/items/filter/")
 async def filter_item(
-                      price_min: Annotated[Decimal, Query()] = None, 
-                      price_max: Annotated[Decimal, Query()] = None,
+                      price_min: Annotated[int, Query()] = None, 
+                      price_max: Annotated[int, Query()] = None,
                       tax_included: Annotated[bool, Query()] = None,
                       tags: Annotated[list[str], Query()] = None,
                       ):
@@ -69,15 +69,15 @@ async def filter_item(
 @app.post("/items/create_with_fields/")
 async def add_item(
                       item: Annotated[Item_F, Body()], 
-                      important: Annotated[int, Body()] = None
+                      importance: Annotated[int, Body()]
                       ):
     
     return {
         "item": item,
-        "important": important
+        "importance": importance
     }
 
-@app.post("/items/offers/")
+@app.post("/offers/")
 async def add_offer(
                       name: Annotated[str, Body()],
                       discount: Annotated[float, Body()],
@@ -85,12 +85,13 @@ async def add_offer(
                       ):
     
     return {
-        "offer": name,
-        "items": items,
-        "discount": discount
+        "offer_name": name,
+        "discount": discount,
+        "items": items
+        
     }
 
-@app.post("/items/users/")
+@app.post("/users/")
 async def add_user(
                       username: Annotated[str, Body()],
                       email: Annotated[str, Body()],
@@ -115,7 +116,8 @@ async def add_extra_data(
         "start_time": start_time,
         "end_time": end_time,
         "repeat_every": repeat_every,
-        "process_id": process_id
+        "process_id": process_id,
+        "message": "This is an item with extra data types."
     }
 
 @app.post("/items/cookies/")
