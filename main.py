@@ -65,66 +65,57 @@ async def read_items(
         "tags": tags,
         "message": "This is a filtered list of items based on the provided criteria."
     }
-
 @app.post("/items/create_with_fields/")
 async def add_item(
-                      item: Annotated[Item_1, Body()], 
-                      importance: Annotated[int, Body()]
-                      ):
-    
+    item: Annotated[Item_1, Body()],
+    importance: Annotated[int , Body()]
+):
     return {
         "item": item,
         "importance": importance
     }
-
 @app.post("/offers/")
 async def add_offer(
-                      name: Annotated[str, Body()],
-                      discount: Annotated[float, Body()],
-                      items: Annotated[list[Item_1], Body()]
-                      ):
-    
+    name: Annotated[str, Body()],
+    discount: Annotated[float, Body()],
+    items: Annotated[list[Item_1], Body()]
+):
     return {
         "offer_name": name,
         "discount": discount,
         "items": items
-        
     }
-
 @app.post("/users/")
 async def add_user(
-                      username: Annotated[str, Body()],
-                      email: Annotated[str, Body()],
-                      full_name: Annotated[str, Body()]
-                      ):
-    
+    username: Annotated[str, Body()],
+    email: Annotated[str, Body()],
+    full_name: Annotated[str, Body()],
+):
     return {
         "username": username,
         "email": email,
         "full_name": full_name
     }
-
 @app.post("/items/extra_data_types/")
 async def add_extra_data_types(
-                      start_time: Annotated[datetime, Body()],
-                      end_time: Annotated[time, Body()],
-                      repeat_every: Annotated[timedelta, Body()],
-                      process_id: Annotated[UUID, Body()]
-                      ):
-    
+    start_time: Annotated[datetime, Body()],
+    end_time: Annotated[time, Body()],
+    repeat_every: Annotated[timedelta, Body()],
+    process_id: Annotated[UUID, Body()]
+):
     return {
+        "message": "This is an item with extra data types.",
         "start_time": start_time,
         "end_time": end_time,
         "repeat_every": repeat_every,
-        "process_id": process_id,
-        "message": "This is an item with extra data types."
+        "process_id": process_id
+        
     }
-
 @app.get("/items/cookies/")
 async def read_items_from_cookies(
-                      session_id: Annotated[str, Cookie(description="Session ID for authentication")]
-                      ):
-    return{
-        "session_id" : session_id,
+    session_id: Annotated[str, Cookie(description="Session ID for authentication")]
+):
+    return {
+        "session_id": session_id,
         "message": "This is the session ID obtained from the cookies."
     }
