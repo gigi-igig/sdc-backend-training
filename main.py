@@ -120,7 +120,7 @@ async def add_extra_data_types(
         "message": "This is an item with extra data types."
     }
 
-@app.post("/items/cookies/")
+@app.get("/items/cookies/")
 async def read_items_from_cookies(
                       session_id: Annotated[str, Cookie(description="Session ID for authentication")]
                       ):
