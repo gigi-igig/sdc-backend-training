@@ -124,5 +124,5 @@ async def read_item_from_cookie(
                       ):
     return{
         "session_id" : session_id,
-
+        "message": "This is the session ID obtained from the cookies."
     }
