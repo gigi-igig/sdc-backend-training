@@ -1,16 +1,17 @@
-from fastapi import FastAPI, Path, Query, HTTPException, Body, Cookie
-from pydantic import BaseModel, Field
+from fastapi import FastAPI, Query, Body, Cookie, Path, HTTPException
 from typing import Annotated
 from decimal import Decimal
+from pydantic import BaseModel, Field
 from datetime import datetime, time, timedelta
 from uuid import UUID
 app = FastAPI()
 
 class Item(BaseModel):
-    name: str
-    description: str| None = None
-    price: float
-    tax: float| None = None
+    item_id: int = None
+    name: str = "Test Item"
+    description: str = "A test description"
+    price: Decimal = 10.5
+    tax: Decimal = 1.5
 
 @app.get("/")
 async def root():
@@ -53,17 +54,16 @@ class Item_1(BaseModel):
 
 @app.post("/items/filter/")
 async def read_items(
-    price_min: Annotated[int, Query(description = "Minimum price of the item")] = None, 
-    price_max: Annotated[int, Query(description = "Maximum price of the item")] = None,
+    price_min: Annotated[int , Query(description = "Minimum price of the item")] = None,
+    price_max: Annotated[int , Query(description = "Maximum price of the item")] = None,
     tax_included: Annotated[bool, Query(description = "Boolean indicating whether tax is included in the price")] = None,
-    tags: Annotated[list[str], Query(description="List of tags to filter items")] = None,
+    tags: Annotated[list[str], Query(description="List of tags to filter items")] = None
     ):
-    
     return {
-        "price_range":[price_min, price_max],
+        "price_range": [price_min, price_max],
         "tax_included": tax_included,
         "tags": tags,
-        "message":"This is a filtered list of items based on the provided criteria."
+        "message": "This is a filtered list of items based on the provided criteria."
     }
 
 @app.post("/items/create_with_fields/")
