@@ -45,7 +45,7 @@ async def update_item(
     
     return response
 
-class Item_F(BaseModel):
+class Item_1(BaseModel):
     name: str
     description: str| None = Field(default=None, title="The description of the item")
     price: float = Field(gt = 0., description="The price of the item must greater than zero")
@@ -53,11 +53,11 @@ class Item_F(BaseModel):
 
 @app.post("/items/filter/")
 async def read_items(
-                      price_min: Annotated[int, Query()] = None, 
-                      price_max: Annotated[int, Query()] = None,
-                      tax_included: Annotated[bool, Query()] = None,
-                      tags: Annotated[list[str], Query()] = None,
-                      ):
+    price_min: Annotated[int, Query(description = "Minimum price of the item")] = None, 
+    price_max: Annotated[int, Query(description = "Maximum price of the item")] = None,
+    tax_included: Annotated[bool, Query(description = "Boolean indicating whether tax is included in the price")] = None,
+    tags: Annotated[list[str], Query(description="List of tags to filter items")] = None,
+    ):
     
     return {
         "price_range":[price_min, price_max],
@@ -68,7 +68,7 @@ async def read_items(
 
 @app.post("/items/create_with_fields/")
 async def add_item(
-                      item: Annotated[Item_F, Body()], 
+                      item: Annotated[Item_1, Body()], 
                       importance: Annotated[int, Body()]
                       ):
     
@@ -81,7 +81,7 @@ async def add_item(
 async def add_offer(
                       name: Annotated[str, Body()],
                       discount: Annotated[float, Body()],
-                      items: Annotated[list[Item_F], Body()]
+                      items: Annotated[list[Item_1], Body()]
                       ):
     
     return {
@@ -122,7 +122,7 @@ async def add_extra_data_types(
 
 @app.post("/items/cookies/")
 async def read_items_from_cookies(
-                      session_id: Annotated[str, Cookie()]
+                      session_id: Annotated[str, Cookie(description="Session ID for authentication")]
                       ):
     return{
         "session_id" : session_id,
