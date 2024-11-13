@@ -7,11 +7,10 @@ from uuid import UUID
 app = FastAPI()
 
 class Item(BaseModel):
-    item_id: int = None
-    name: str = "Test Item"
-    description: str = "A test description"
-    price: Decimal = 10.5
-    tax: Decimal = 1.5
+    name: str
+    description: str| None = None
+    price: float
+    tax: float| None = None
 
 @app.get("/")
 async def root():
@@ -113,7 +112,7 @@ async def add_extra_data_types(
     }
 @app.get("/items/cookies/")
 async def read_items_from_cookies(
-    session_id: Annotated[str, Cookie(description="Session ID for authentication")]
+    session_id: Annotated[str, Cookie()]
 ):
     return {
         "session_id": session_id,
