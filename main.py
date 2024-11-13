@@ -52,7 +52,7 @@ class Item_F(BaseModel):
     tax: float = Field(gt = 0., description="The tax of the item must greater than zero")
 
 @app.post("/items/filter/")
-async def filter_item(
+async def read_items(
                       price_min: Annotated[int, Query()] = None, 
                       price_max: Annotated[int, Query()] = None,
                       tax_included: Annotated[bool, Query()] = None,
@@ -105,9 +105,9 @@ async def add_user(
     }
 
 @app.post("/items/extra_data_types/")
-async def add_extra_data(
+async def add_extra_data_types(
                       start_time: Annotated[datetime, Body()],
-                      end_time: Annotated[datetime, Body()],
+                      end_time: Annotated[time, Body()],
                       repeat_every: Annotated[timedelta, Body()],
                       process_id: Annotated[UUID, Body()]
                       ):
@@ -121,7 +121,7 @@ async def add_extra_data(
     }
 
 @app.post("/items/cookies/")
-async def read_item_from_cookie(
+async def read_items_from_cookies(
                       session_id: Annotated[str, Cookie()]
                       ):
     return{
