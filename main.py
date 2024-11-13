@@ -63,7 +63,7 @@ async def read_items(
         "price_range":[price_min, price_max],
         "tax_included": tax_included,
         "tags": tags,
-        "message":"items that match the given filter criteria"
+        "message":"This is a filtered list of items based on the provided criteria."
     }
 
 @app.post("/items/create_with_fields/")
