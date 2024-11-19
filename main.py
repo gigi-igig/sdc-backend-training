@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Query, Body, Cookie, Path, HTTPException
+from fastapi import FastAPI, Query, Body, Cookie, Path, File, Form, UploadFile, HTTPException, status
 from typing import Annotated
 from decimal import Decimal
 from pydantic import BaseModel, Field
@@ -118,3 +118,30 @@ async def read_items_from_cookies(
         "session_id": session_id,
         "message": "This is the session ID obtained from the cookies."
     }
+
+@app.post("/items/form_and_file/")
+async def add_form_and_file(
+    name: Annotated[str, Form()],
+    price: Annotated[float, Form()],
+    file: Annotated[UploadFile, File()] = None,
+    description: Annotated[str, Form()] = None,
+    tax: Annotated[float, Form()] = None
+):
+    if price < 0.0:
+        raise HTTPException(
+            status_code = status.HTTP_400_BAD_REQUEST, 
+            detail = "Price cannot be negative"
+            )
+    
+    if not file:
+        raise HTTPException(
+            status_code = status.HTTP_422_UNPROCESSABLE_ENTITY, 
+            detail = "The file is missing"
+            )
+    
+    results = {"name": name, "price": price, "filename": file.filename, "message": "This is an item created using form data and a file."}
+    if description:
+        results.update({"description": description})
+    if tax:
+        results.update({"tax": tax})
+    return results
