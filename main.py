@@ -1,5 +1,5 @@
 from fastapi import FastAPI, Query, Body, Cookie, Path, File, Form, UploadFile, HTTPException, status
-from typing import Annotated
+from typing import Annotated, List, Optional
 from decimal import Decimal
 from pydantic import BaseModel, Field
 from datetime import datetime, time, timedelta
@@ -145,3 +145,29 @@ async def add_form_and_file(
     if tax:
         results.update({"tax": tax})
     return results
+
+class Author(BaseModel):
+    name: str = Field(..., example="Jane Doe")
+    age: int = Field(..., ge=0, example=45)
+
+class Book(BaseModel):
+    title: str = Field(..., example="A Journey to FastAPI")
+    author: Author
+    summary: Optional[str] = Field(None, example="An introductory book about FastAPI.")
+
+
+@app.get("/books/", response_model=List[Book])
+async def get_books():
+
+    return[ 
+        Book(title="Book 1", author=Author(name="Author 1", age=40), summary="A great book about..."),
+        Book(title="Book 2", author=Author(name="Author 2", age=38), summary="An interesting journey of..."),
+    ]
+
+@app.post("/books/create_with_author/")
+async def create_book(book: Book):
+    return {"title": book.title, "author": book.author, "summary": book.summary}
+
+@app.post("/books/", status_code=201)
+async def create_book(book: Book):
+    return {"title": book.title, "author": book.author, "summary": book.summary}
